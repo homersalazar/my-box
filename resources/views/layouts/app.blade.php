@@ -4,13 +4,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {{-- Tailwind --}}
+        <script src="https://cdn.tailwindcss.com"></script>
         {{-- Flowbite --}}
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-        {{-- Tailwind --}}
-        <script src="https://cdn.tailwindcss.com"></script>
         {{-- Font Awesome --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        {{-- JQuery --}}
+        <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+        {{-- DataTable --}}
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+        <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+        <script src="{{ asset('js/dataTable.js') }}"></script>
+
         <title>My Box</title>
     </head>
     <body>
@@ -96,5 +103,4 @@
             @yield('content')
         </div>
     </body>
-
 </html>
