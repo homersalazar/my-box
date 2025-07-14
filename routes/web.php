@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ShareController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,11 @@ Route::prefix('files')->group(function () {
 
 Route::prefix('share')->group(function () {
     Route::get('/', [ShareController::class, 'index'])->name('shares.index');
+});
+
+Route::prefix('account')->group(function () {
+    Route::get('/signup', [UserController::class, 'signup'])->name('account.signup');
+    Route::post('/login', [UserController::class, 'login'])->name('account.login');
+    Route::post('/register', [UserController::class, 'register'])->name('account.register');
+    Route::get('/logout', [UserController::class, 'logout'])->name('account.logout');
 });
