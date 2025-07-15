@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex flex-col gap-2 md:gap-5 w-full">
+    @include('components.create-folder-modal')
 
+    <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5">
             <div class="flex flex-row w-full p-2.5 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 gap-3 lg:gap-5">
@@ -39,14 +40,14 @@
                 dropdownId="actionsDropdown"
             >
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <div data-modal-target="create-folder-modal" data-modal-toggle="create-folder-modal" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         <i class="fa-solid fa-folder-plus"></i>&nbsp; New Folder
-                    </a>
+                    </div>
                 </li>
                 <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         <i class="fa-solid fa-file-arrow-up"></i>&nbsp; File Upload
-                    </a>
+                    </div>
                 </li>
             </x-dropdown>
         </div>

@@ -106,5 +106,46 @@
         @else
             @yield('content')
         @endauth
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    customClass: {
+                        width: '24em',
+                        title: 'text-xl'
+                    }
+                });
+            </script>
+        @elseif (session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: "{{ session('error') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    customClass: {
+                        width: '24em',
+                        title: 'text-xl'
+                    }
+                });
+            </script>
+        @elseif (session('info'))
+            <script>
+                Swal.fire({
+                    icon: 'info',
+                    title: "{{ session('info') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    customClass: {
+                        width: '24em',
+                        title: 'text-xl'
+                    }
+                });
+            </script>
+        @endif
     </body>
 </html>

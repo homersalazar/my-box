@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('components.create-folder-modal')
+
     <div class="flex flex-col gap-5 w-full">
         <div class="flex flex-row justify-between gap-2">
             <h1 class="font-semibold texl-xl sm:text-2xl text-white">
@@ -19,12 +21,12 @@
                     dropdownId="actionsDropdown"
                 >
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                        <div data-modal-target="create-folder-modal" data-modal-toggle="create-folder-modal" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-solid fa-folder-plus"></i>&nbsp; New Folder
-                        </a>
+                        </div>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-solid fa-file-arrow-up"></i>&nbsp; File Upload
                         </a>
                     </li>
