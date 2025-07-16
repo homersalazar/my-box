@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('lines', function (Blueprint $table) {
             $table->id();
             $table->string('file_name')->nullable();
+            $table->string('file_path')->nullable();
             $table->foreignId('header_id')
                 ->nullable()
                 ->constrained()

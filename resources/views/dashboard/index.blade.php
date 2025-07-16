@@ -2,6 +2,7 @@
 
 @section('content')
     @include('components.create-folder-modal')
+    @include('components.create-file-modal')
 
     <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>
@@ -40,14 +41,10 @@
                 dropdownId="actionsDropdown"
             >
                 <li>
-                    <div data-modal-target="create-folder-modal" data-modal-toggle="create-folder-modal" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <i class="fa-solid fa-folder-plus"></i>&nbsp; New Folder
-                    </div>
+                    <x-new-folder-button />
                 </li>
                 <li>
-                    <div class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <i class="fa-solid fa-file-arrow-up"></i>&nbsp; File Upload
-                    </div>
+                    <x-upload-file-button />
                 </li>
             </x-dropdown>
         </div>
@@ -60,10 +57,11 @@
             </label>
 
             {{-- Folder Item --}}
-            <x-folder-item
-                :title="'testing'"
-                :id="1"
-            />
+            <div id="folderDiv" class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                @foreach($folders as $row)
+                    <x-folder-item :title="$row->folder_name" :id="$row->id"/>
+                @endforeach
+            </div>
 
             {{-- File toggle button --}}
             <label class="text-lg md:text-xl font-bold max-w-xs" onclick="fileToggle()">Files
@@ -79,22 +77,4 @@
         <x-table-view />
 
     </div>
-    <script>
-        // Function to toggle folder visibility
-        const viewToggle = () => {
-            const tableView = document.getElementById("tableView");
-            const listView = document.getElementById("listView");
-            const cardDiv = document.getElementById("cardDiv");
-            const tableDiv = document.getElementById("tableDiv");
-
-            // Toggle hidden class to switch views
-            tableView.classList.toggle("hidden");
-            listView.classList.toggle("hidden");
-
-            cardDiv.classList.toggle("hidden");
-            tableDiv.classList.toggle("hidden");
-        }
-
-    </script>
-
 @endsection

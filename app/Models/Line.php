@@ -11,6 +11,7 @@ class Line extends Model
 
     protected $fillable = [
         'file_name',
+        'file_path',
         'header_id',
         'user_id',
         'status',

@@ -28,6 +28,8 @@ Route::prefix('home')->group(function () {
 Route::prefix('files')->group(function () {
     Route::get('/', [FileController::class, 'index'])->name('files.index');
     Route::post('/create-folder', [FileController::class, 'create_folder'])->name('files.create_folder');
+
+    Route::post('/create_file', [FileController::class, 'create_file'])->name('files.create_file');
 });
 
 
