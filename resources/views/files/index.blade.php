@@ -3,6 +3,8 @@
 @section('content')
     @include('components.create-folder-modal')
     @include('components.create-file-modal')
+    @include('components.file-menu')
+
     <div class="flex flex-col gap-5 w-full">
         <div class="flex flex-row justify-between gap-2">
             <h1 class="font-semibold texl-xl sm:text-2xl text-white">
@@ -51,10 +53,60 @@
             </label>
 
             {{-- File Item --}}
-            <x-file-item/>
+            <div id="fileDiv" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+                @foreach($files as $row)
+                    <x-file-item
+                        :id="$row->id"
+                        :name="$row->file_name"
+                        :path="$row->file_path"
+                    />
+                @endforeach
+            </div>
         </div>
 
         {{-- Table View --}}
-        <x-table-view />
+        <x-table-view
+            :headers="['', 'Name', 'Size', 'Owner', 'Last Modified', '']"
+        >
+            @foreach ($files as $row)
+                @php
+                    $extension = strtolower(pathinfo($row->file_name, PATHINFO_EXTENSION));
+                    $file = storage_path('app/public/uploads/' . $row->file_path);
+                    $size = filesize($file);
+
+                    if (in_array($extension, ['jpeg', 'jpg', 'png', 'webp'])) {
+                        $display = '<i class="fa-solid fa-image text-gray-600 text-lg"></i>';
+                    } elseif (in_array($extension, ['doc', 'docx'])) {
+                        $display = '<i class="fa-solid fa-file-word text-blue-600 text-lg"></i>';
+                    } elseif ($extension === 'pdf') {
+                        $display = '<i class="fa-solid fa-file-pdf text-red-600 text-lg"></i>';
+                    } elseif ($extension === 'xlx' || $extension === 'xlsx ') {
+                        $display = '<i class="fa-solid fa-file-excel text-green-600 text-lg"></i>';
+                    } else {
+                        $display = '<i class="fa-solid fa-file text-gray-600 text-lg"></i>';
+                    }
+                @endphp
+                <tr>
+                    <td>{!! $display !!}</td>
+                    <td class="font-semibold">{{ $row->file_name }}</td>
+                    <td>{{ round($size / (1024 * 1024), 2) . " MB" }}</td>
+                    <td>me</td>
+                    <td>
+                        {{ \Carbon\Carbon::parse($row->updated_at)->format('F j, Y \a\t g:i A') }}
+                    </td>
+                    <td>
+                        <button
+                            id="fileDropdownButton{{ $row->id }}"
+                            data-dropdown-toggle="fileDropdownMenu{{ $row->id }}"
+                            class="text-white focus:ring-4 focus:outline-none focus:ring-transparent hover:bg-gray-500 font-medium rounded-full text-sm px-3.5 py-2 text-center inline-flex items-center"
+                            type="button"
+                        >
+                            <i class="fa-solid fa-ellipsis-vertical text-gray-700"></i>
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </x-table-view>
+
     </div>
 @endsection

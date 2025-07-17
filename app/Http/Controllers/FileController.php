@@ -13,7 +13,8 @@ class FileController extends Controller
     public function index()
     {
         $folders = Header::where('user_id', auth()->id())->get();
-        return view('files.index', compact('folders'));
+        $files = Line::where('user_id', auth()->id())->get();
+        return view('files.index', compact('folders', 'files'));
     }
 
     // HEADERS
@@ -52,6 +53,8 @@ class FileController extends Controller
             'files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx'
         ]);
 
+        DB::beginTransaction();
+
         try {
             if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
@@ -77,6 +80,8 @@ class FileController extends Controller
                     ]);
                 }
 
+                DB::commit();
+
                 return response()->json([
                     'success' => true,
                     'message' => 'File(s) uploaded successfully!',
@@ -88,6 +93,8 @@ class FileController extends Controller
                 ], 400);
             }
         } catch (\Throwable $e) {
+            DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Upload failed: ' . $e->getMessage(),
