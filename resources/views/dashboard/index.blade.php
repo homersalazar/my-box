@@ -4,7 +4,6 @@
     @include('components.create-folder-modal')
     @include('components.create-file-modal')
     @include('components.folder-menu')
-    @include('components.file-menu')
 
     <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>
@@ -80,7 +79,10 @@
                         :id="$row->id"
                         :name="$row->file_name"
                         :path="$row->file_path"
-                    />
+                    >
+                        @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'card-'])
+                        @include('components.file-menu', ['id' => $row->id, 'prefix' => 'card-'])
+                    </x-file-item>
                 @endforeach
             </div>
         </div>
@@ -116,17 +118,15 @@
                         {{ \Carbon\Carbon::parse($row->updated_at)->format('F j, Y \a\t g:i A') }}
                     </td>
                     <td>
-                        <button
-                            id="fileDropdownButton{{ $row->id }}"
-                            data-dropdown-toggle="fileDropdownMenu{{ $row->id }}"
-                            class="text-white focus:ring-4 focus:outline-none focus:ring-transparent hover:bg-gray-500 font-medium rounded-full text-sm px-3.5 py-2 text-center inline-flex items-center"
-                            type="button"
-                        >
-                            <i class="fa-solid fa-ellipsis-vertical text-gray-700"></i>
-                        </button>
+                        @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'table-'])
                     </td>
                 </tr>
             @endforeach
         </x-table-view>
+
+        {{-- Render file-menus here for each row --}}
+        @foreach ($files as $row)
+            @include('components.file-menu', ['id' => $row->id, 'prefix' => 'table-'])
+        @endforeach
     </div>
 @endsection
