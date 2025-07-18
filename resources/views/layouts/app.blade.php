@@ -22,9 +22,9 @@
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
 
-        <script src="{{ asset('js/dataTable.js') }}"></script>
         <script src="{{ asset('js/folderToggle.js') }}"></script>
         <script src="{{ asset('js/viewToggle.js') }}"></script>
+        <script src="{{ asset('js/fileToggle.js') }}"></script>
 
         <title>My Box</title>
     </head>

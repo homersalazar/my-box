@@ -27,7 +27,9 @@ Route::prefix('home')->group(function () {
 
 Route::prefix('files')->group(function () {
     Route::get('/', [FileController::class, 'index'])->name('files.index');
-    Route::post('/create-folder', [FileController::class, 'create_folder'])->name('files.create_folder');
+    Route::post('/create_folder', [FileController::class, 'create_folder'])->name('files.create_folder');
+    Route::get('/show_folder/{id}', [FileController::class, 'show_folder'])->name('files.show_folder');
+    Route::get('/download_folder/{id}', [FileController::class, 'download_folder'])->name('files.download_folder');
 
     Route::post('/create_file', [FileController::class, 'create_file'])->name('files.create_file');
 });

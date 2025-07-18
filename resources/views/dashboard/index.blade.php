@@ -3,7 +3,7 @@
 @section('content')
     @include('components.create-folder-modal')
     @include('components.create-file-modal')
-    @include('components.folder-menu')
+    {{-- @include('components.folder-menu') --}}
 
     <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>
@@ -60,10 +60,14 @@
             </label>
 
             {{-- Folder Item --}}
-            <div id="folderDiv" class="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                @foreach($folders as $row)
-                    <x-folder-item :title="$row->folder_name" :id="$row->id"/>
-                @endforeach
+            <div id="folderDiv" class="flex flex-col gap-5 w-full">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+                    @forelse ($folders as $row)
+                        <x-folder-item :title="$row->folder_name" :id="$row->id"/>
+                    @empty
+                        <p>No folder found.</p>
+                    @endforelse
+                </div>
             </div>
 
             {{-- File toggle button --}}
@@ -73,25 +77,32 @@
             </label>
 
             {{-- File Item --}}
-            <div id="fileDiv" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
-                @foreach($files as $row)
-                    <x-file-item
-                        :id="$row->id"
-                        :name="$row->file_name"
-                        :path="$row->file_path"
-                    >
-                        @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'card-'])
-                        @include('components.file-menu', ['id' => $row->id, 'prefix' => 'card-'])
-                    </x-file-item>
-                @endforeach
+            <div class="flex flex-col gap-5 w-full">
+                <div id="fileDiv" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
+                    @forelse($files as $row)
+                        <x-file-item
+                            :id="$row->id"
+                            :name="$row->file_name"
+                            :path="$row->file_path"
+                        >
+                            @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'card-'])
+                            @include('components.file-menu', ['id' => $row->id, 'prefix' => 'card-'])
+                        </x-file-item>
+                    @empty
+                        <p>No file found.</p>
+                    @endforelse
+                </div>
+
+                {{ $files->links() }}
             </div>
         </div>
 
         {{-- Table View --}}
         <x-table-view
             :headers="['', 'Name', 'Size', 'Owner', 'Last Modified', '']"
+            :files="$files"
         >
-            @foreach ($files as $row)
+            @forelse ($files as $row)
                 @php
                     $extension = strtolower(pathinfo($row->file_name, PATHINFO_EXTENSION));
                     $file = storage_path('app/public/uploads/' . $row->file_path);
@@ -109,8 +120,10 @@
                         $display = '<i class="fa-solid fa-file text-gray-600 text-lg"></i>';
                     }
                 @endphp
-                <tr>
-                    <td>{!! $display !!}</td>
+                <tr class="border-b text-black dark:border-gray-700 border-gray-200 dark:hover:bg-gray-200">
+                    <th scope="row" class="px-6 py-2 font-medium whitespace-nowrap dark:text-white">
+                        {!! $display !!}
+                    </th>
                     <td class="font-semibold">{{ $row->file_name }}</td>
                     <td>{{ round($size / (1024 * 1024), 2) . " MB" }}</td>
                     <td>me</td>
@@ -121,7 +134,13 @@
                         @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'table-'])
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr class="border-b text-black dark:border-gray-700 border-gray-200 dark:hover:bg-gray-200">
+                    <th colspan="8" scope="row" class="px-6 py-2 font-medium whitespace-nowrap text-center">
+                        No data found.
+                    </th>
+                </tr>
+            @endforelse
         </x-table-view>
 
         {{-- Render file-menus here for each row --}}

@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="flex flex-col gap-5 w-full">
         <div class="flex flex-row justify-between gap-2">
-            <h1 class="font-semibold texl-xl sm:text-2xl">
-                Shared With Me
+            <h1 class="texl-xl sm:text-2xl">
+                <span class="font-semibold">My Folder -</span> <span class="font-bold">{{ $folders->folder_name }}</span>
             </h1>
             <div class="flex flex-row">
                 <x-button onclick="viewToggle()" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
@@ -19,7 +20,7 @@
             {{-- File Item --}}
             <div class="flex flex-col gap-5 w-full">
                 <div id="fileDiv" class="grid grid-cols-2 lg:grid-cols-5 gap-2">
-                    @foreach($files as $row)
+                    @forelse($files as $row)
                         <x-file-item
                             :id="$row->id"
                             :name="$row->file_name"
@@ -28,7 +29,9 @@
                             @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'card-'])
                             @include('components.file-menu', ['id' => $row->id, 'prefix' => 'card-'])
                         </x-file-item>
-                    @endforeach
+                    @empty
+                        <p>No data found.</p>
+                    @endforelse
                 </div>
 
                 {{ $files->links() }}
@@ -37,10 +40,10 @@
 
         {{-- Table View --}}
         <x-table-view
-            :headers="['', 'Name', 'Shared by', 'Date shared', '']"
-            {{-- :files="$files" --}}
+            :headers="['', 'Name', 'Size', 'Owner', 'Last Modified', '']"
+            :files="$files"
         >
-            {{-- @foreach ($files as $row)
+            @forelse ($files as $row)
                 @php
                     $extension = strtolower(pathinfo($row->file_name, PATHINFO_EXTENSION));
                     $file = storage_path('app/public/uploads/' . $row->file_path);
@@ -72,7 +75,13 @@
                         @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'table-'])
                     </td>
                 </tr>
-            @endforeach --}}
+            @empty
+                <tr class="border-b text-black dark:border-gray-700 border-gray-200 dark:hover:bg-gray-200">
+                    <th colspan="8" scope="row" class="px-6 py-2 font-medium whitespace-nowrap text-center">
+                        No data found.
+                    </th>
+                </tr>
+            @endforelse
         </x-table-view>
 
         {{-- Render file-menus here for each row --}}
