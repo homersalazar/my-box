@@ -30,6 +30,7 @@ Route::prefix('files')->group(function () {
     Route::post('/create_folder', [FileController::class, 'create_folder'])->name('files.create_folder');
     Route::get('/show_folder/{id}', [FileController::class, 'show_folder'])->name('files.show_folder');
     Route::get('/download_folder/{id}', [FileController::class, 'download_folder'])->name('files.download_folder');
+    Route::put('/rename_folder/{id}', [FileController::class, 'rename_folder'])->name('files.rename_folder');
 
     Route::post('/create_file', [FileController::class, 'create_file'])->name('files.create_file');
 });

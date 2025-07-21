@@ -82,7 +82,7 @@ class FileController extends Controller
             // Add each file to the ZIP
             $filesAdded = false;
             foreach ($files as $file) {
-                $sourcePath = storage_path('app/public/uploads/' . $file->file_path);
+                $sourcePath = storage_path('/public/uploads/' . $file->file_path);
                 if (file_exists($sourcePath)) {
                     // Add file to ZIP with folder structure
                     $zipPath = $folderName . '/' . basename($file->file_path);
@@ -104,6 +104,35 @@ class FileController extends Controller
         } catch (Exception $e) {
             Log::error('Error creating ZIP file: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Unable to create ZIP file: ' . $e->getMessage());
+        }
+    }
+
+    public function rename_folder(Request $request, $id)
+    {
+        $request->validate([
+            'folder_name' => 'required|string|max:20',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+
+            $folder = Header::findOrFail($id);
+            $folder->folder_name = ucfirst($request->input('folder_name'));
+            $folder->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Folder updated successfully!',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->withErrors([
+                'error' => 'Failed to create folder: ' . $e->getMessage()
+            ])->withInput();
         }
     }
 

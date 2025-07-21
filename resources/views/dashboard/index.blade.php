@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('components.create-folder-modal')
     @include('components.create-file-modal')
-    {{-- @include('components.folder-menu') --}}
 
     <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>

@@ -26,7 +26,12 @@
             </a>
         </li>
         <li>
-            <div class="block px-4 py-2 hover:bg-gray-200">
+            <div
+                data-modal-target="editFolderModal"
+                data-modal-toggle="editFolderModal"
+                onclick="rename_folder('{{ $id }}', '{{ $title }}')"
+                class="block px-4 py-2 hover:bg-gray-200"
+            >
                 <i class="fa-solid fa-pen-to-square"></i> Rename
             </div>
         </li>
@@ -58,3 +63,77 @@
         </li>
     </ul>
 </div>
+
+{{-- Create --}}
+<x-modal id="create-folder-modal" title="Create folder" form="createFolderForm" action="Create">
+    <form action="{{ route('files.create_folder') }}" method="POST" class="space-y-4" id="createFolderForm">
+        @csrf
+        <div class="mb-4">
+            <label for="folderName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Folder Name</label>
+            <input
+                type="text"
+                id="folderName"
+                name="folder_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Enter folder name"
+                value="Untitled folder"
+                required
+            >
+        </div>
+    </form>
+</x-modal>
+
+{{-- Rename --}}
+<x-modal id="editFolderModal" title="Rename" form="editFolderForm" action="Update">
+    <form method="POST" id="editFolderForm">
+        @csrf
+        @method('PUT')
+        <div class="mb-4">
+            <label for="edit_folder" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Folder Name</label>
+            <input
+                type="text"
+                id="edit_folder"
+                name="folder_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Enter folder name"
+                value="Untitled folder"
+                required
+            >
+        </div>
+    </form>
+</x-modal>
+
+<script>
+    const rename_folder = (id, folder_name) => {
+        document.getElementById('edit_folder').value = folder_name;
+
+        $("#editFolderForm").off("submit").on("submit", function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                url: `/files/rename_folder/${id}`,
+                method:"POST",
+                data: formData,
+                success:function(data){
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000
+                    }).then((result) => {
+                        window.location.reload();
+                    });
+                },
+                error: function (error) {
+                    console.error('Error update event:', error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while updating the event.",
+                        icon: "error"
+                    });
+                }
+            });
+        });
+    }
+</script>
