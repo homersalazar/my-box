@@ -11,11 +11,11 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $allFiles = Line::where('user_id', auth()->id())
-            ->where('status', '=', '0')
+            ->where('line_status', '=', '0')
             ->get();
         $folders = Header::where('user_id', auth()->id())->paginate(10);
         $files = Line::where('user_id', auth()->id())
-            ->where('status', '=', '0')
+            ->where('line_status', '=', '0')
             ->whereNull('header_id')
             ->paginate(10);
 

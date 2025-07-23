@@ -18,7 +18,7 @@ class FileController extends Controller
     {
         $folders = Header::where('user_id', auth()->id())->paginate(10);
         $files = Line::where('user_id', auth()->id())
-            ->where('status', '=', '0')
+            ->where('line_status', '=', '0')
             ->whereNull('header_id')
             ->paginate(10);
         return view('files.index', compact('folders', 'files'));
@@ -167,7 +167,7 @@ class FileController extends Controller
                         'user_id'   => auth()->id(),
                         'file_name' => $displayName,
                         'file_path' => $storedName,
-                        'status'    => 0,
+                        'line_status'    => 0, // 0 - created, 1 - soft delete, 2 - hard delete
                     ]);
                 }
 

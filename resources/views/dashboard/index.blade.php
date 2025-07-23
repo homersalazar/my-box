@@ -104,15 +104,23 @@
                 @php
                     $extension = strtolower(pathinfo($row->file_name, PATHINFO_EXTENSION));
                     $file = storage_path('app/public/uploads/' . $row->file_path);
-                    $size = filesize($file);
+                    $bytes = filesize($file);
+                    if ($bytes === 0) {
+                        $file_size = '0 Bytes';
+                    }
 
+                    $k = 1024;
+                    $sizes = ['Bytes', 'KB', 'MB', 'GB'];
+
+                    $i = floor(log($bytes, $k));
+                    $file_size = round($bytes / pow($k, $i), 2) . ' ' . $sizes[$i];
                     if (in_array($extension, ['jpeg', 'jpg', 'png', 'webp'])) {
                         $display = '<i class="fa-solid fa-image text-gray-600 text-lg"></i>';
                     } elseif (in_array($extension, ['doc', 'docx'])) {
                         $display = '<i class="fa-solid fa-file-word text-blue-600 text-lg"></i>';
                     } elseif ($extension === 'pdf') {
                         $display = '<i class="fa-solid fa-file-pdf text-red-600 text-lg"></i>';
-                    } elseif ($extension === 'xlx' || $extension === 'xlsx ') {
+                    } elseif ($extension === 'xls' || $extension === 'xlsx') {
                         $display = '<i class="fa-solid fa-file-excel text-green-600 text-lg"></i>';
                     } else {
                         $display = '<i class="fa-solid fa-file text-gray-600 text-lg"></i>';
@@ -123,7 +131,7 @@
                         {!! $display !!}
                     </th>
                     <td class="font-semibold">{{ $row->file_name }}</td>
-                    <td>{{ round($size / (1024 * 1024), 2) . " MB" }}</td>
+                    <td>{{ $file_size }}</td>
                     <td>me</td>
                     <td>
                         {{ \Carbon\Carbon::parse($row->updated_at)->format('F j, Y \a\t g:i A') }}

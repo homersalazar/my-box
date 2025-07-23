@@ -171,7 +171,7 @@
             case 'image/webp':
                 return 'fa-solid fa-image text-2xl text-gray-500';
             case 'application/pdf':
-                return 'fa-solid fa-file-pdf text-2xl text-gray-500';
+                return 'fa-solid fa-file-pdf text-2xl text-red-500';
             case 'application/msword':
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                 return 'fa-solid fa-file-word text-2xl text-blue-500';
