@@ -13,7 +13,7 @@
 </div>
 
 <!-- Folder menu -->
-<div id="dropdownDivider-{{ $id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
+<div id="dropdownDivider-{{ $id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border shadow-md w-44">
     <ul class="py-2 text-sm text-gray-700 cursor-pointer" aria-labelledby="dropdownDividerButton">
         <li>
             <a href="{{ route('files.show_folder', $id) }}" class="block px-4 py-2 hover:bg-gray-200">
@@ -39,13 +39,12 @@
             <hr class="text-sm text-gray-700 hover:bg-gray-200">
         </li>
         <li>
-            <div class="block px-4 py-2 hover:bg-gray-200">
+            <div
+                data-modal-target="shareFolderModal"
+                data-modal-toggle="shareFolderModal"
+                class="block px-4 py-2 hover:bg-gray-200"
+            >
                 <i class="fa-solid fa-user-plus"></i> Share
-            </div>
-        </li>
-        <li>
-            <div class="block px-4 py-2 hover:bg-gray-200">
-                <i class="fa-solid fa-folder-open"></i> Organize
             </div>
         </li>
         <li>
@@ -103,6 +102,24 @@
     </form>
 </x-modal>
 
+{{-- Share --}}
+<x-modal id="shareFolderModal" title="Share" form="editFolderForm" action="Share">
+    <div class="mb-4">
+        <input
+            type="text"
+            name="shareWith"
+            id="shareWith"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Enter folder name"
+            required
+        >
+    </div>
+    <div class="relative mb-5 z-10">
+        <div id="shareWithList"></div>
+    </div>
+    {{ csrf_field() }}
+</x-modal>
+
 <script>
     const rename_folder = (id, folder_name) => {
         document.getElementById('edit_folder').value = folder_name;
@@ -136,4 +153,31 @@
             });
         });
     }
+
+    $(document).mouseup(function(e){
+        var shared = $("#shareWithList");
+        if (!shared.is(e.target) && shared.has(e.target).length === 0){
+            shared.hide();
+        }
+    });
+
+    $(document).ready(function(){
+        $('#shareWith').keyup(function(){
+            var query = $(this).val();
+            if(query != ''){
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{ route('shares.autocomplete') }}",
+                    method:"POST",
+                    data:{
+                        query:query ,
+                        _token:_token},
+                    success:function(data){
+                        $('#shareWithList').fadeIn();
+                        $('#shareWithList').html(data);
+                    }
+                });
+            }
+        });
+    });
 </script>

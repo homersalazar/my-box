@@ -14,6 +14,6 @@ class Line extends Model
         'file_path',
         'header_id',
         'user_id',
-        'status',
+        'line_status',
     ];
 }

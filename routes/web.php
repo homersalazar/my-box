@@ -38,6 +38,7 @@ Route::prefix('files')->group(function () {
 
 Route::prefix('share')->group(function () {
     Route::get('/', [ShareController::class, 'index'])->name('shares.index');
+    Route::post('/autocomplete', [ShareController::class, 'autocomplete'])->name('shares.autocomplete');
 });
 
 Route::prefix('account')->group(function () {

@@ -18,6 +18,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->smallInteger('header_status')->nullable();
             $table->timestamps();
         });
     }

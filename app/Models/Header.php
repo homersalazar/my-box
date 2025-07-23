@@ -12,5 +12,6 @@ class Header extends Model
     protected $fillable = [
         'folder_name',
         'user_id',
+        'header_status'
     ];
 }

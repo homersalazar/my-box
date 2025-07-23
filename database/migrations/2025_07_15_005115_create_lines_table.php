@@ -23,7 +23,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->smallInteger('status')->nullable();
+            $table->smallInteger('line_status')->nullable();
 
             $table->timestamps();
         });
