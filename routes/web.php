@@ -33,6 +33,7 @@ Route::prefix('files')->group(function () {
     Route::put('/rename_folder/{id}', [FileController::class, 'rename_folder'])->name('files.rename_folder');
 
     Route::post('/create_file', [FileController::class, 'create_file'])->name('files.create_file');
+    Route::put('/rename_file/{id}', [FileController::class, 'rename_file'])->name('files.rename_file');
 });
 
 

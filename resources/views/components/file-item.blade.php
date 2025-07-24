@@ -1,5 +1,5 @@
 @props(['id', 'name', 'path'])
-    <div class="max-w-xs bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="max-w-xs bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
         <div class="pt-5 px-5">
             @php
                 $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
@@ -17,7 +17,7 @@
                 $file_size = round($bytes / pow($k, $i), 2) . ' ' . $sizes[$i];
 
                 if (in_array($extension, ['jpeg', 'jpg', 'png', 'webp'])) {
-                    $display = '<img class="rounded-xl h-32 md:h-42 w-full" src="' . asset('storage/uploads/' . $path) . '" alt="' . $name . '" />';
+                    $display = '<img class="rounded-xl h-32 md:h-42 w-full object-contain" src="' . asset('storage/uploads/' . $path) . '" alt="' . $name . '" />';
                 } elseif (in_array($extension, ['doc', 'docx'])) {
                     $display = '
                         <span class="rounded-xl h-32 md:h-42 w-full bg-gray-100 flex items-center justify-center">
@@ -44,9 +44,11 @@
             {!! $display !!}
         </div>
         <div class="p-4">
-            <div class="flex flex-row justify-between">
+            <div class="flex flex-row justify-between gap-2">
                 <h5 class="font-bold tracking-tight text-gray-900">{{ $name }}</h5>
-                {{ $slot }}
+                <div>
+                    {{ $slot }}
+                </div>
             </div>
             <p class="font-normal text-xs text-gray-700">
                 {{ $file_size }}

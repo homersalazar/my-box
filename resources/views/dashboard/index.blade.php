@@ -2,7 +2,6 @@
 
 @section('content')
     @include('components.create-file-modal')
-
     <div class="flex flex-col gap-2 md:gap-5 w-full">
         <h1 class="font-semibold texl-xl sm:text-2xl text-white dark:text-gray-900">Overview Storage</h1>
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5">
@@ -84,7 +83,12 @@
                             :path="$row->file_path"
                         >
                             @include('components.file-menu-button', ['id' => $row->id, 'prefix' => 'card-'])
-                            @include('components.file-menu', ['id' => $row->id, 'prefix' => 'card-'])
+                            @include('components.file-menu', [
+                                'id' => $row->id,
+                                'prefix' => 'card-',
+                                'name' => $row->file_name,
+                                'path' => $row->file_path
+                            ])
                         </x-file-item>
                     @empty
                         <p>No file found.</p>
@@ -151,7 +155,12 @@
 
         {{-- Render file-menus here for each row --}}
         @foreach ($files as $row)
-            @include('components.file-menu', ['id' => $row->id, 'prefix' => 'table-'])
+            @include('components.file-menu', [
+                'id' => $row->id,
+                'prefix' => 'card-',
+                'name' => $row->file_name,
+                'path' => $row->file_path
+            ])
         @endforeach
     </div>
 @endsection
