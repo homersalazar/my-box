@@ -34,11 +34,14 @@ Route::prefix('files')->group(function () {
 
     Route::post('/create_file', [FileController::class, 'create_file'])->name('files.create_file');
     Route::put('/rename_file/{id}', [FileController::class, 'rename_file'])->name('files.rename_file');
+    Route::post('/autocomplete', [FileController::class, 'autocomplete'])->name('files.autocomplete');
 });
 
 
 Route::prefix('share')->group(function () {
     Route::get('/', [ShareController::class, 'index'])->name('shares.index');
+    Route::post('/share_file', [ShareController::class, 'share_file'])->name('shares.share_file');
+
     Route::post('/autocomplete', [ShareController::class, 'autocomplete'])->name('shares.autocomplete');
 });
 

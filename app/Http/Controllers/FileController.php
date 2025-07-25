@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Header;
 use App\Models\Line;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -191,6 +192,46 @@ class FileController extends Controller
                 'message' => 'Upload failed: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $query = trim($request->get('query'));
+        $searchTerm = '%' . $query . '%';
+        if (!empty($query)) {
+            $data = User::where('id', '!=', auth()->id())
+                ->select('id', 'firstname', 'lastname', 'email')
+                ->where(function ($q) use ($searchTerm) {
+                    $q->orWhereRaw("CONCAT(firstname, ' ', lastname) LIKE ?", [$searchTerm])
+                        ->orWhere('firstname', 'LIKE', $searchTerm)
+                        ->orWhere('lastname', 'LIKE', $searchTerm)
+                        ->orWhere('email', 'LIKE', $searchTerm);
+                })
+                ->limit(10)
+                ->get();
+
+            if ($data->count() > 0) {
+                $output = '<ul class="max-w-full divide-y divide-gray-200 bg-gray-50 dark:divide-gray-700 rounded-sm">';
+                foreach ($data as $row) {
+                    $full_name = ucfirst($row->firstname) . ' ' . ucfirst($row->lastname);
+
+                    // Properly escape the data for JavaScript
+                    $escaped_name = addslashes(htmlspecialchars($full_name));
+
+                    $output .= '<li class="p-1.5 cursor-pointer hover:bg-gray-200"
+                    onclick="selectUser(' . $row->id . ', \'' . $escaped_name . '\')">
+                    ' . htmlspecialchars($full_name) . '<br><span class="text-sm text-gray-500">' . htmlspecialchars($row->email) . '</span>
+                </li>';
+                }
+                $output .= '</ul>';
+            } else {
+                $output = '<div class="text-center border-t border-b text-base p-2 text-gray-500">No data found</div>';
+            }
+
+            return $output;
+        }
+
+        return '';
     }
 }
 
